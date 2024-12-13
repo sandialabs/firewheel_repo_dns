@@ -1,0 +1,12 @@
+name: dns.insert_records
+attributes:
+    depends:
+        - topology
+    provides: []
+model_components:
+    depends:
+        - base_objects
+        - generic_vm_objects
+        - linux.base_objects
+        - dns.populate_zones
+plugin: plugin.py

@@ -1,0 +1,12 @@
+name: dns.populate_zones
+attributes:
+    depends:
+        - topology
+    provides: []
+model_components:
+    depends:
+        - base_objects
+        - generic_vm_objects
+        - linux.base_objects
+        - dns.dns_objects
+plugin: plugin.py

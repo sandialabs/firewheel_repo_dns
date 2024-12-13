@@ -1,0 +1,13 @@
+name: dns.set_nameservers
+attributes:
+    depends:
+        - topology
+    provides: []
+model_components:
+    depends:
+        - base_objects
+        - linux.base_objects
+        - dns.dns_objects
+vm_resources:
+    - vm_resources/*
+plugin: plugin.py

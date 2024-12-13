@@ -1,0 +1,12 @@
+name: dns.insert_dns
+attributes:
+    depends:
+        - topology
+    provides:
+        - dns
+model_components:
+    depends:
+        - dns.populate_zones
+        - dns.insert_records
+        - dns.configure_bind
+        - dns.set_nameservers

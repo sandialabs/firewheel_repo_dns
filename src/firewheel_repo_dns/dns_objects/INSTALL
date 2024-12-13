@@ -1,0 +1,140 @@
+#!/bin/bash
+
+#######################################################
+# This is a sample install file for dns.dns_objects.
+# This file can be used to perform one-time actions
+# which help prepare the model component for use.
+#
+# Common uses of install.sh files include downloading
+# VM Resources from the Internet and installing new
+# Python packages into FIREWHEEL's virtual environment.
+#
+# NOTE: When you are creating these files, it is
+# imperative that specific versions of software are
+# used. Without being as specific as possible,
+# experimental results will **NOT** be repeatable.
+# We strongly recommend that any changes to software
+# versions are accompanied by a warning and new model
+# component version.
+#######################################################
+
+# Create a flag for verifying installation
+INSTALL_FLAG=.dns.dns_objects.installed
+
+#######################################################
+# Checking if there this script has already been complete.
+#######################################################
+function check_flag() {
+    if [[ -f "$INSTALL_FLAG" ]]; then
+        echo >&2 "dns.dns_objects is already installed!"
+        exit 117;  # Structure needs cleaning
+    fi
+}
+
+
+#######################################################
+# Install python packages into the virtual environment
+# used by FIREWHEEL. This takes in an array of packages.
+#######################################################
+function install_python_package() {
+    pkgs=("$@")
+    for i in "${pkgs[@]}";
+    do
+        python -m pip install "$i"
+    done
+}
+
+
+#######################################################
+# Download using wget and then checksum the downloaded files.
+#
+# It is important to verify that the downloaded files
+# are the files are the same ones as expected.
+# This function provides an outline of how to checksum files,
+# but will need to be updated with the specific hashes/file names
+# that have been downloaded.
+#
+# This function assumes that the passed in hashes are SHA-256
+#######################################################
+function wget_and_checksum() {
+    downloads=("$@")
+    # Uses 2D arrays in bash: https://stackoverflow.com/a/44831174
+    declare -n d
+    for d in "${downloads[@]}";
+    do
+        wget "${d[0]}"
+        echo "${d[1]}  ${d[2]}" | shasum -a 256 --check
+    done
+}
+
+
+#######################################################
+# A function to help users clean up a partial installation
+# in the event of an error.
+#######################################################
+function cleanup() {
+    echo "Cleaning up dns.dns_objects install"
+    rm -rf $VMR_DIR
+    rm -rf $INSTALL_FLAG
+    exit 1
+}
+trap cleanup ERR
+
+# Start to run the script
+
+# Ensure we only complete the script once
+check_flag
+
+#######################################################
+# Uncomment if there are Pip packages to install
+# `pip_packages` should be space separated strings of
+# the packages to install
+#######################################################
+# pip_packages=("requests" "pandas")
+# install_python_package "${pip_packages[@]}"
+
+
+######################################################
+# Uncomment if there is data/VM resources/images to download
+# `file1`, `file2`, etc. should be space separated strings of
+# (URL SHASUM-256 FILENAME).
+#
+# We recommend that explicit versions are used for all Images/VMRs to prevent
+# possible differences between instances of a given Model Component.
+# Please be mindful of the software versions as it can have unintended
+# consequences on your Emulytics experiment.
+#
+# We require checksums of the files to assist users in verifying
+# that they have downloaded the same version.
+#######################################################
+VMR_DIR=bind9_xenial_debs
+mkdir -p $VMR_DIR
+pushd $VMR_DIR
+
+# Be sure to use SHA-256 hashes for the checksums (e.g. shasum -a 256 <file>)
+file1=("https://launchpad.net/ubuntu/+source/bind9/1:9.10.3.dfsg.P4-8ubuntu1.15/+build/17413822/+files/liblwres141_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb" "22ba4b7c38d9dfde2e119ae68a800041531f0b83b8403b4a36eb217eab795699" "liblwres141_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb")
+file2=("https://launchpad.net/ubuntu/+source/bind9/1:9.10.3.dfsg.P4-8ubuntu1.15/+build/17413822/+files/libisccfg140_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb" "23e7c9dbbd9dd0600c439451e8a2e3ea1f1f6fdda0d07861edf4fa114d1206e1" "libisccfg140_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb")
+file3=("https://launchpad.net/ubuntu/+source/bind9/1:9.10.3.dfsg.P4-8ubuntu1.15/+build/17413822/+files/libisccc140_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb" "3b88ddd9c25ee68bd3aceba1dba9a32d4a496045aa21dd8df9f505fb753ad92b" "libisccc140_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb")
+file4=("https://launchpad.net/ubuntu/+source/bind9/1:9.10.3.dfsg.P4-8ubuntu1.15/+build/17413822/+files/libisc160_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb" "64e55e26c445ece532753d604949e54eda2bbda507543cb94592d95692b5782f" "libisc160_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb")
+file5=("https://launchpad.net/ubuntu/+source/bind9/1:9.10.3.dfsg.P4-8ubuntu1.15/+build/17413822/+files/libirs141_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb" "93e4f1cdfe249e8dec99f1bacf2249e072915961cdf17f5010964d136da034b7" "libirs141_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb")
+file6=("https://launchpad.net/ubuntu/+source/bind9/1:9.10.3.dfsg.P4-8ubuntu1.15/+build/17413822/+files/libdns162_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb" "c2886b1de8b8128329d539e84d96201b8880cb7d568a7cf2e52d970c2a881935" "libdns162_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb")
+file7=("https://launchpad.net/ubuntu/+source/bind9/1:9.10.3.dfsg.P4-8ubuntu1.15/+build/17413822/+files/libbind9-140_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb" "5054ac7d63126e8ed441fdf4cd00c33b40d8607c70e9e254bed8d73f9ab9d075" "libbind9-140_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb")
+file8=("https://launchpad.net/ubuntu/+source/bind9/1:9.10.3.dfsg.P4-8ubuntu1.15/+build/17413822/+files/dnsutils_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb" "ec734ad2648b5b429e9208fa7d880c0d868f812954cf9bad55bf49b45170d934" "dnsutils_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb")
+file9=("https://launchpad.net/ubuntu/+source/bind9/1:9.10.3.dfsg.P4-8ubuntu1.15/+build/17413822/+files/bind9utils_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb" "ac4c75d27d9206bee506cb88252072fd62a0590a321c19319f8d9b9482f13732" "bind9utils_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb")
+file10=("https://launchpad.net/ubuntu/+source/bind9/1:9.10.3.dfsg.P4-8ubuntu1.15/+build/17413822/+files/bind9-host_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb" "77164b575a9b142402630dd8c96a513ce26a24101e152e1f83a1fa543c6faa41" "bind9-host_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb")
+file11=("https://launchpad.net/ubuntu/+source/bind9/1:9.10.3.dfsg.P4-8ubuntu1.15/+build/17413822/+files/bind9_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb" "2e28ec903b9c04ef60984f36229930d190640d4b5154b9235f2222fcc265a344" "bind9_9.10.3.dfsg.P4-8ubuntu1.15_amd64.deb")
+files=(file1 file2 file3 file4 file5 file6 file7 file8 file9 file10 file11)
+wget_and_checksum "${files[@]}"
+echo "Downloaded and checksummed all files!"
+popd
+
+# Compress directory
+tar -czvf $VMR_DIR.tgz $VMR_DIR
+mv $VMR_DIR.tgz vm_resources/
+rm -rf $VMR_DIR
+
+#######################################################
+# Add any other desired configuration/packaging here
+#######################################################
+# Set the flag to notify of successful completion
+touch $INSTALL_FLAG

@@ -1,0 +1,10 @@
+name: dns.dns_objects
+attributes:
+    depends: []
+    provides: []
+model_components:
+    depends:
+        - linux.ubuntu1604
+model_component_objects: model_component_objects.py
+vm_resources:
+    - vm_resources/*
