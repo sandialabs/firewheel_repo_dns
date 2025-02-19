@@ -54,8 +54,6 @@ class PopulateZones(AbstractPlugin):
 
         vertices = self.g.get_vertices()
         for vertex in vertices:
-            if vertex.get("deleted"):
-                continue
             if not vertex.is_decorated_by(Switch):
                 full_name = vertex.name
                 name = full_name.split(".")
