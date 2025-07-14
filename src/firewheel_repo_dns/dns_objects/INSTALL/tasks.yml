@@ -14,35 +14,12 @@
     path: "{{ vm_resources_dir }}"
     state: directory
 
-- name: Create parent directories
-  ansible.builtin.file:
-    path: "{{ vm_resources_dir }}/{{ item.name }}"
-    state: directory
-  loop: "{{ parents }}"
-
-- name: Process files
-  block:
-    - name: Check if file exists
-      ansible.builtin.stat:
-        path: "{{ vm_resources_dir }}/{{ item.parent }}/{{ item.dest }}"
-      register: file_check
-      loop: "{{ files }}"
-
-    - name: Verify checksum for existing file
-      ansible.builtin.command: >
-        echo "{{ item.sha256 }}  {{ vm_resources_dir }}/{{ item.parent }}/{{ item.dest }}" | sha256sum -c -
-      register: checksum_result
-      when: file_check.results | selectattr('item.dest', 'equalto', item.dest) | map(attribute='stat.exists') | first
-      ignore_errors: yes
-      changed_when: false
-      loop: "{{ files }}"
-
-    - name: Download missing file
-      ansible.builtin.get_url:
-        url: "{{ item.url }}"
-        dest: "{{ vm_resources_dir }}/{{ item.parent }}/{{ item.dest }}"
-      when: not file_check.results | selectattr('item.dest', 'equalto', item.dest) | map(attribute='stat.exists') | first
-      loop: "{{ files }}"
+- name: Download and verify files
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "{{ vm_resources_dir }}/{{ item.parent }}/{{ item.dest }}"
+    checksum: "sha256:{{ item.sha256 }}"
+  loop: "{{ files }}"
 
 - name: Compress parent directories into tarballs
   ansible.builtin.archive:
