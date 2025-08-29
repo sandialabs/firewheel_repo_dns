@@ -1,14 +1,4 @@
 ---
-- name: Check if DNS Objects is already installed
-  ansible.builtin.stat:
-    path: "{{ install_flag }}"
-  register: flag_check
-
-- name: Fail if already installed
-  ansible.builtin.fail:
-    msg: "dns_objects is already installed!"
-  when: flag_check.stat.exists
-
 - name: Create VM resources directory
   ansible.builtin.file:
     path: "{{ vm_resources_dir }}"
@@ -33,19 +23,3 @@
     path: "{{ vm_resources_dir }}/{{ item.name }}"
     state: absent
   loop: "{{ parents }}"
-
-- name: Verify required files
-  ansible.builtin.stat:
-    path: "{{ item.destination }}"
-  register: required_files_check
-  loop: "{{ required_files }}"
-
-- name: Fail if required files are missing
-  ansible.builtin.fail:
-    msg: "Required file {{ item.destination }} is missing!"
-  when: required_files_check.results | selectattr('stat.exists', 'equalto', False) | list | length > 0
-
-- name: Set installation flag
-  ansible.builtin.file:
-    path: "{{ install_flag }}"
-    state: touch
