@@ -53,4 +53,4 @@ files:
 
 
 required_files:
-  - destination: "{{ vm_resources_dir }}/bind9-xenial-debs.tgz"
+  - destination: "{{ download_dir }}/bind9-xenial-debs.tgz"
