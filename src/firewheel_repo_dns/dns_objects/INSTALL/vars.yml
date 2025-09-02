@@ -1,6 +1,6 @@
 ---
 install_flag: "{{ mc_dir }}/.dns_objects.installed"
-vm_resources_dir: "{{ mc_dir }}/vm_resources"
+download_dir: "{{ mc_dir }}/vm_resources"
 parents:
   - name: "bind9-xenial-debs"
     tarball: "bind9-xenial-debs.tgz"
