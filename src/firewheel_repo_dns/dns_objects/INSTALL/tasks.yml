@@ -1,0 +1,31 @@
+---
+- name: Create VM resources directory
+  ansible.builtin.file:
+    path: "{{ download_dir }}"
+    state: directory
+
+- name: Create parent directories
+  ansible.builtin.file:
+    path: "{{ download_dir }}/{{ item.name }}"
+    state: directory
+  loop: "{{ parents }}"
+
+- name: Download and verify files
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "{{ download_dir }}/{{ item.parent }}/{{ item.dest }}"
+    checksum: "sha256:{{ item.sha256 }}"
+  loop: "{{ files }}"
+
+- name: Compress parent directories into tarballs
+  ansible.builtin.archive:
+    path: "{{ download_dir }}/{{ item.name }}"
+    dest: "{{ download_dir }}/{{ item.tarball }}"
+    format: gz
+  loop: "{{ parents }}"
+
+- name: Remove parent directories
+  ansible.builtin.file:
+    path: "{{ download_dir }}/{{ item.name }}"
+    state: absent
+  loop: "{{ parents }}"
