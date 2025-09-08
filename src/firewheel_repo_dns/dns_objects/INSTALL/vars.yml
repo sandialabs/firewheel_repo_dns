@@ -53,4 +53,4 @@ files:
 
 
 required_files:
-  - destination: "{{ download_dir }}/bind9-xenial-debs.tgz"
+  - destination: "{{ mc_dir }}/bind9-xenial-debs.tgz"
