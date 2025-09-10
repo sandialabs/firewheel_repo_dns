@@ -11,7 +11,7 @@ authors = [
 description = "This repository contains FIREWHEEL model components for enabling Domain Name Systems (DNS) within a FIREWHEEL experiment."
 readme = "README.rst"
 dependencies = [
-  "firewheel",
+  "firewheel>=2.9.0",
   "firewheel_repo_base",
   "firewheel_repo_linux",
 ]
