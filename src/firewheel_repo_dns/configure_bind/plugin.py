@@ -78,13 +78,17 @@ class ConfigureBind(AbstractPlugin):
                 )
                 if self.DEBUG:
                     pickle_file = open(
-                        os.path.join(self.zonedir, "pickled_metadata"), "w", encoding="utf-8"
+                        os.path.join(self.zonedir, "pickled_metadata"),
+                        "w",
+                        encoding="utf-8",
                     )
                     pickle_file.write(pickled_metadata)
                     pickle_file.close()
                     # Save the zone data dictionary for easy reading
                     pickle_file = open(
-                        os.path.join(self.zonedir, "zone_dictionary"), "w", encoding="utf-8"
+                        os.path.join(self.zonedir, "zone_dictionary"),
+                        "w",
+                        encoding="utf-8",
                     )
                     pickle_file.write(pprint.pformat(zones))
                     pickle_file.close()
@@ -113,7 +117,9 @@ class ConfigureBind(AbstractPlugin):
             if self.DEBUG:
                 if not zone:
                     zone = "dot."
-                zone_file = open(os.path.join(self.zonedir, zone), "w", encoding="utf-8")
+                zone_file = open(
+                    os.path.join(self.zonedir, zone), "w", encoding="utf-8"
+                )
                 zone_file.write(zone_file_contents)
                 zone_file.close()
 
@@ -175,7 +181,9 @@ class ConfigureBind(AbstractPlugin):
         if self.DEBUG:
             if glue_record:
                 gr_file = open(
-                    os.path.join(self.zonedir, f"{base_domain}{'glue'}"), "w", encoding="utf-8"
+                    os.path.join(self.zonedir, f"{base_domain}{'glue'}"),
+                    "w",
+                    encoding="utf-8",
                 )
                 gr_file.write(glue_record)
                 gr_file.close()
@@ -207,7 +215,11 @@ class ConfigureBind(AbstractPlugin):
 
         if self.DEBUG:
             if glue_record:
-                gr_file = open(os.path.join(self.zonedir, f"{'dot.'}{'glue'}"), "w", encoding="utf-8")
+                gr_file = open(
+                    os.path.join(self.zonedir, f"{'dot.'}{'glue'}"),
+                    "w",
+                    encoding="utf-8",
+                )
                 gr_file.write(glue_record)
                 gr_file.close()
 
@@ -247,7 +259,9 @@ class ConfigureBind(AbstractPlugin):
         if self.DEBUG:
             if not base_domain:
                 base_domain = "dot."
-            ar_file = open(os.path.join(self.zonedir, f"{base_domain}{'a'}"), "w", encoding="utf-8")
+            ar_file = open(
+                os.path.join(self.zonedir, f"{base_domain}{'a'}"), "w", encoding="utf-8"
+            )
             ar_file.write(record)
             ar_file.close()
 
