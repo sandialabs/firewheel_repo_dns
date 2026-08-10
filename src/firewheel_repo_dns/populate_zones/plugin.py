@@ -48,9 +48,7 @@ class PopulateZones(AbstractPlugin):
         """
 
         zones = {}
-        self.log.debug(
-            "PTRs requested for %s = %s", dns_server_name, str(hosts_tracked)
-        )
+        self.log.debug("PTRs requested for %s = %s", dns_server_name, hosts_tracked)
 
         vertices = self.g.get_vertices()
         for vertex in vertices:
